@@ -1,0 +1,21 @@
+{
+    "input_values": {
+        "type": "object",
+        "properties": {
+            "wind_speed": {
+                "title": "Wind Speed",
+                "description": "Steady inflow wind speed at the reference height [m/s]",
+                "type": "number",
+                "minimum": 1e-6,
+                "maximum": 330
+            },
+            "reference_height": {
+                "title": "Reference Height",
+                "description": "The reference height above ground at which the inflow wind speed is defined [m]",
+                "type": "number",
+                "minimum": 1e-6,
+                "maximum": 1000
+            }
+        }
+    }
+}
