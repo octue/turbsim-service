@@ -17,10 +17,5 @@
                 "maximum": 1000
             }
         }
-    },
-    "input_manifest": {
-        "datasets": [
-            {"key": "turbsim-input"}
-        ]
     }
 }
