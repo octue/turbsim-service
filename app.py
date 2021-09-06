@@ -21,6 +21,8 @@ def run(analysis):
 
         subprocess.run(["turbsim", input_path])
 
+    analysis.output_values = ["It worked!"]
+
 
 def create_turbsim_file_contents(reference_height, wind_speed):
     new_lines = []
