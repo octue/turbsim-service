@@ -17,7 +17,7 @@ def run(analysis):
     with tempfile.TemporaryDirectory() as temporary_directory:
         input_path = os.path.join(temporary_directory, "TurbSim.inp")
 
-        analysis.debug("Attempting to update input TurbSim.inp file with input values.")
+        analysis.logger.debug("Attempting to update input TurbSim.inp file with input values.")
 
         with open(input_path, "w") as f:
             f.writelines(
