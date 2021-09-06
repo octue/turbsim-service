@@ -29,10 +29,10 @@ def create_turbsim_file_contents(reference_height, wind_speed):
         for line in f.readlines():
 
             if "RefHt" in line:
-                line = FLOAT_REGEX.sub(reference_height, line)
+                line = FLOAT_REGEX.sub(str(reference_height), line)
 
             if "URef" in line:
-                line = FLOAT_REGEX.sub(wind_speed, line)
+                line = FLOAT_REGEX.sub(str(wind_speed), line)
 
             new_lines.append(line)
 
