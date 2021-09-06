@@ -25,7 +25,7 @@ def run(analysis):
 def create_turbsim_file_contents(reference_height, wind_speed):
     new_lines = []
 
-    with open("/app/TurbSim.inp") as f:
+    with open("/app/data/TurbSim.inp") as f:
         for line in f.readlines():
 
             if "RefHt" in line:
