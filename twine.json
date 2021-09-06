@@ -1,5 +1,5 @@
 {
-    "input_values": {
+    "input_values_schema": {
         "type": "object",
         "properties": {
             "wind_speed": {
