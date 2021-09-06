@@ -17,6 +17,8 @@ def run(analysis):
     with tempfile.TemporaryDirectory() as temporary_directory:
         input_path = os.path.join(temporary_directory, "TurbSim.inp")
 
+        analysis.debug("Attempting to update input TurbSim.inp file with input values.")
+
         with open(input_path, "w") as f:
             f.writelines(
                 update_turbsim_input_file(
@@ -25,14 +27,16 @@ def run(analysis):
                 )
             )
 
+        analysis.logger.info("Starting turbulence simulation.")
         subprocess.run(["turbsim", input_path])
+        analysis.logger.info("Finished turbulence simulation.")
 
         output = Datafile(path=os.path.join(temporary_directory, "TurbSim.bts"), labels=["TurbSim"])
+        output_cloud_path = storage.path.generate_gs_path(os.environ["BUCKET_NAME"], f"TurbSim-{start_datetime}.bts")
 
-        output.to_cloud(
-            project_name=os.environ["PROJECT_NAME"],
-            cloud_path=storage.path.generate_gs_path(os.environ["BUCKET_NAME"], f"TurbSim-{start_datetime}.bts")
-        )
+        analysis.logger.info(f"Attempting to save output to {output_cloud_path}.")
+        output.to_cloud(project_name=os.environ["PROJECT_NAME"], cloud_path=output_cloud_path)
+        analysis.logger.info("Output saved.")
 
     analysis.output_values = ["It worked!"]
 
