@@ -1,5 +1,11 @@
 FROM octue/openfast
 
+# Allow statements and log messages to immediately appear in the Knative logs on Google Cloud.
+ENV PYTHONUNBUFFERED True
+
+ENV PROJECT_ROOT=/app
+WORKDIR $PROJECT_ROOT
+
 COPY requirements-dev.txt .
 COPY . .
 
