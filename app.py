@@ -11,7 +11,7 @@ def run(analysis):
     input_file = list(analysis.input_manifest.get_dataset("turbsim_input").files)[0]
 
     analysis.logger.info("Starting turbulence simulation.")
-    subprocess.run(["turbsim", input_file.path])
+    subprocess.run(["turbsim", input_file.get_local_path()])
     analysis.logger.info("Finished turbulence simulation.")
 
     output_file = Datafile(path="TurbSim.bts", labels=["turbsim"])
