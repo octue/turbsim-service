@@ -38,7 +38,7 @@ def run(analysis):
         output.to_cloud(project_name=os.environ["PROJECT_NAME"], cloud_path=output_cloud_path)
         analysis.logger.info("Output saved.")
 
-    analysis.output_values = ["It worked!"]
+        analysis.output_values = {"output_path": output_cloud_path}
 
 
 def update_turbsim_input_file(reference_height, wind_speed):
