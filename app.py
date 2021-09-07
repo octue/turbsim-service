@@ -20,7 +20,7 @@ def run(analysis):
     output_cloud_path = storage.path.generate_gs_path(
         os.environ["BUCKET_NAME"],
         "turbsim",
-        f"TurbSim-{start_datetime}.bts"
+        f"TurbSim-{start_datetime.isoformat().replace(':', '-')}.bts"
     )
 
     # This is temporary until https://github.com/octue/octue-sdk-python/pull/205 is merged - then it should be able to
