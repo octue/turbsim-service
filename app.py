@@ -14,7 +14,7 @@ def run(analysis):
     subprocess.run(["turbsim", input_file.get_local_path()])
     analysis.logger.info("Finished turbulence simulation.")
 
-    output_file = Datafile(path="TurbSim.bts", labels=["turbsim"])
+    output_file = Datafile(path=input_file.get_local_path() + ".bts", labels=["turbsim"])
     analysis.output_manifest.get_dataset("turbsim_output").add(output_file)
 
     output_cloud_path = storage.path.generate_gs_path(
