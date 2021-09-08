@@ -1,4 +1,4 @@
 # Note that pyFAST is not mentioned in here as it has to be installed in an unconventional way to be usable - this is
 # dealt with in the Dockerfile.
 
-octue==0.3.2
+octue==0.3.1
