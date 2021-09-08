@@ -27,6 +27,7 @@ def run(analysis):
     # be dealt with by the `finalise` method below.
     analysis.logger.info(f"Attempting to save output to {output_cloud_path}.")
     output_file.to_cloud(project_name=os.environ["PROJECT_NAME"], cloud_path=output_cloud_path)
+    output_file.path = output_cloud_path
     analysis.logger.info("Output saved.")
 
     analysis.finalise()
