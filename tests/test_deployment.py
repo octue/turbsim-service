@@ -35,4 +35,8 @@ class TestDeployment(unittest.TestCase):
 
         self.assertIsNone(answer["output_values"])
         self.assertIsNotNone(answer["output_manifest"])
-        self.assertIn("turbsim", list(answer['output_manifest'].datasets[0].files)[0].labels)
+
+        output_file = list(answer['output_manifest'].datasets[0].files)[0]
+        self.assertIn("turbsim", output_file.labels)
+
+        storage.client.GoogleCloudStorageClient(PROJECT_NAME).delete(cloud_path=output_file.absolute_path)
