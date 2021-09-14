@@ -1,5 +1,4 @@
 import datetime
-import logging
 import os
 from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 from threading import Thread
@@ -45,5 +44,5 @@ def run(analysis):
 
 def log_lines_from_stream(stream, logger):
     with stream:
-        for line in stream.readlines():
+        for line in iter(stream.readline, b''):
             logger.info(line.decode().strip())
