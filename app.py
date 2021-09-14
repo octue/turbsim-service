@@ -1,6 +1,8 @@
 import datetime
+import logging
 import os
-import subprocess
+from subprocess import Popen, PIPE, STDOUT, CalledProcessError
+from threading import Thread
 
 from octue.cloud import storage
 from octue.resources import Datafile
@@ -11,7 +13,15 @@ def run(analysis):
     input_file = list(analysis.input_manifest.get_dataset("turbsim_input").files)[0]
 
     analysis.logger.info("Starting turbulence simulation.")
-    subprocess.run(["turbsim", input_file.get_local_path()])
+
+    command = ["turbsim", input_file.get_local_path()]
+    process = Popen(command, stdout=PIPE, stderr=STDOUT)
+    Thread(target=log_lines_from_stream, args=[process.stdout, analysis.logger]).start()
+    process.wait()
+
+    if process.returncode != 0:
+        raise CalledProcessError(returncode=process.returncode, cmd="".join(command))
+
     analysis.logger.info("Finished turbulence simulation.")
 
     output_file = Datafile(path=input_file.get_local_path() + ".bts", labels=["turbsim"])
@@ -31,3 +41,9 @@ def run(analysis):
     analysis.logger.info("Output saved.")
 
     analysis.finalise()
+
+
+def log_lines_from_stream(stream, logger):
+    with stream:
+        for line in stream.readlines():
+            logger.info(line.decode().strip())

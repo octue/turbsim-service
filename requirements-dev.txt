@@ -1,4 +1,4 @@
 # Note that pyFAST is not mentioned in here as it has to be installed in an unconventional way to be usable - this is
 # dealt with in the Dockerfile.
 
-octue @ https://github.com/octue/octue-sdk-python/archive/fix/use-correct-log-formatter-in-analysis-logger.zip
+octue==0.3.4
