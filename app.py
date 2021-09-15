@@ -1,10 +1,9 @@
 import datetime
 import os
-from subprocess import Popen, PIPE, STDOUT, CalledProcessError
-from threading import Thread
 
 from octue.cloud import storage
 from octue.resources import Datafile
+from octue.utils.processes import run_subprocess_and_log_stdout_and_stderr
 
 
 def run(analysis):
@@ -16,31 +15,15 @@ def run(analysis):
     start_datetime = datetime.datetime.now()
     input_file = list(analysis.input_manifest.get_dataset("turbsim_input").files)[0]
 
-    output_file = _run_and_log_turbsim(input_file, analysis.logger)
+    analysis.logger.info("Starting turbulence simulation.")
+    run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.get_local_path()], logger=analysis.logger)
+    analysis.logger.info("Finished turbulence simulation.")
+
+    output_file = Datafile(path=input_file.get_local_path() + ".bts", labels=["turbsim"])
     analysis.output_manifest.get_dataset("turbsim_output").add(output_file)
 
     _save_output_to_cloud(output_file, start_datetime, analysis.logger)
     analysis.finalise()
-
-
-def _run_and_log_turbsim(input_file, analysis_logger):
-    """Run turbsim and forward any logs and error messages from stdout and stdout to the analysis logger.
-
-    :param octue.resources.datafile.Datafile input_file:
-    :param logging.Logger analysis_logger:
-    :return octue.resources.datafile.Datafile: output file
-    """
-    analysis_logger.info("Starting turbulence simulation.")
-    command = ["turbsim", input_file.get_local_path()]
-    process = Popen(command, stdout=PIPE, stderr=STDOUT)
-    Thread(target=_log_lines_from_stream, args=[process.stdout, analysis_logger]).start()
-    process.wait()
-
-    if process.returncode != 0:
-        raise CalledProcessError(returncode=process.returncode, cmd="".join(command))
-
-    analysis_logger.info("Finished turbulence simulation.")
-    return Datafile(path=input_file.get_local_path() + ".bts", labels=["turbsim"])
 
 
 def _save_output_to_cloud(output_file, start_datetime, analysis_logger):
@@ -62,15 +45,3 @@ def _save_output_to_cloud(output_file, start_datetime, analysis_logger):
     output_file.to_cloud(project_name=os.environ["PROJECT_NAME"], cloud_path=output_cloud_path)
     output_file.path = output_cloud_path
     analysis_logger.info("Output saved.")
-
-
-def _log_lines_from_stream(stream, logger):
-    """Log lines from the given stream.
-
-    :param io.BufferedReader stream:
-    :param logging.Logger logger:
-    :return None:
-    """
-    with stream:
-        for line in iter(stream.readline, b''):
-            logger.info(line.decode().strip())
