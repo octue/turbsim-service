@@ -25,8 +25,8 @@ class TestDeployment(unittest.TestCase):
         )
 
         input_manifest = Manifest(
-            datasets=[Dataset(name="turbsim_input", files=[input_file])],
-            keys={"turbsim_input": 0},
+            datasets=[Dataset(name="turbsim", files=[input_file])],
+            keys={"turbsim": 0},
         )
 
         asker = Service(backend=GCPPubSubBackend(project_name=PROJECT_NAME))
