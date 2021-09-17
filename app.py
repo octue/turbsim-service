@@ -19,19 +19,20 @@ def run(analysis):
     run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.local_path], logger=analysis.logger)
     analysis.logger.info("Finished turbulence simulation.")
 
-    # Get the output file and add it to the output dataset.
-    output_file = Datafile(path=input_file.local_path + ".bts", timestamp=start_datetime, labels=["turbsim", "output"])
-
-    analysis.output_manifest.get_dataset("turbsim").add(output_file)
-
-    # Upload the output file to the cloud.
-    output_file.to_cloud(
-        project_name=os.environ["PROJECT_NAME"],
-        cloud_path=storage.path.generate_gs_path(
-            os.environ["BUCKET_NAME"], "turbsim", f"TurbSim-{start_datetime.isoformat().replace(':', '-')}.bts")
+    cloud_path = storage.path.generate_gs_path(
+        os.environ["BUCKET_NAME"], "turbsim", f"TurbSim-{start_datetime.isoformat().replace(':', '-')}.bts"
     )
 
-    analysis.logger.info(f"Output saved to {output_file.cloud_path}.")
+    # Upload the output file to the cloud.
+    storage.client.GoogleCloudStorageClient(os.environ["PROJECT_NAME"]).upload_file(
+        local_path=input_file.local_path + ".bts",
+        cloud_path=cloud_path,
+    )
+    analysis.logger.info(f"Output saved to {cloud_path}.")
+
+    # Get the output file and add it to the output dataset.
+    output_file = Datafile(path=cloud_path, timestamp=start_datetime, labels=["turbsim", "output"])
+    analysis.output_manifest.get_dataset("turbsim").add(output_file)
 
     # Validate the output manifest.
     analysis.finalise()
