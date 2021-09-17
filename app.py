@@ -31,7 +31,7 @@ def run(analysis):
     analysis.logger.info(f"Output saved to {cloud_path}.")
 
     # Get the output file and add it to the output dataset.
-    output_file = Datafile(path=cloud_path, timestamp=start_datetime, labels=["turbsim", "output"])
+    output_file = Datafile(path=cloud_path, project_name=os.environ["PROJECT_NAME"], timestamp=start_datetime, labels=["turbsim", "output"])
     analysis.output_manifest.get_dataset("turbsim").add(output_file)
 
     # Validate the output manifest.
