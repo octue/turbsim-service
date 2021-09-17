@@ -19,29 +19,20 @@ def run(analysis):
     run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.get_local_path()], logger=analysis.logger)
     analysis.logger.info("Finished turbulence simulation.")
 
+    # Get the output file and add it to the output dataset.
     output_file = Datafile(path=input_file.get_local_path() + ".bts", timestamp=start_datetime, labels=["turbsim-output"])
     analysis.output_manifest.get_dataset("turbsim_output").add(output_file)
 
-    _save_output_to_cloud(output_file, start_datetime, analysis.logger)
-    analysis.finalise()
-
-
-def _save_output_to_cloud(output_file, start_datetime, analysis_logger):
-    """Save the output file to the cloud. This is temporary until https://github.com/octue/octue-sdk-python/pull/205 is
-    merged - then it should be able to be dealt with by the `analysis.finalise` method.
-
-    :param octue.resources.datafile.Datafile output_file:
-    :param datetime.datetime start_datetime:
-    :param logging.Logger analysis_logger:
-    :return None:
-    """
-    output_cloud_path = storage.path.generate_gs_path(
-        os.environ["BUCKET_NAME"],
-        "turbsim",
-        f"TurbSim-{start_datetime.isoformat().replace(':', '-')}.bts"
+    # Upload the output file to the cloud.
+    output_file.to_cloud(
+        project_name=os.environ["PROJECT_NAME"],
+        cloud_path=storage.path.generate_gs_path(
+            os.environ["BUCKET_NAME"], "turbsim", f"TurbSim-{start_datetime.isoformat().replace(':', '-')}.bts")
     )
 
-    analysis_logger.info(f"Attempting to save output to {output_cloud_path}.")
-    output_file.to_cloud(project_name=os.environ["PROJECT_NAME"], cloud_path=output_cloud_path)
-    output_file.path = output_cloud_path
-    analysis_logger.info("Output saved.")
+    # Work around issue where cloud paths can be lost during serialisation of datafiles. (See https://github.com/octue/octue-sdk-python/issues/234)
+    output_file.path = output_file.cloud_path
+    analysis.logger.info(f"Output saved to {output_file.cloud_path}.")
+
+    # Validate the output manifest.
+    analysis.finalise()
