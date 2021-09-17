@@ -2,7 +2,7 @@
     "input_manifest": {
         "datasets": [
             {
-                "key": "turbsim_input",
+                "key": "turbsim",
                 "purpose": "A dataset containing a single TurbSim.inp file."
             }
         ]
@@ -10,7 +10,7 @@
     "output_manifest": {
 		"datasets": [
 			{
-				"key": "turbsim_output",
+				"key": "turbsim",
 				"purpose": "A dataset containing a single TurbSim.bts (binary timeseries) file."
 			}
 		]
