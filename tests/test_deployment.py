@@ -22,7 +22,7 @@ class TestDeployment(unittest.TestCase):
         service_id = "octue.services.c3b47b47-cdfa-433d-b5a8-47a58f3bf7cb"
 
         input_manifest = Manifest(
-            datasets={"turbsim": Dataset.from_local_directory(os.path.join(REPOSITORY_ROOT, "data", "turbsim"))}
+            datasets={"turbsim": storage.path.generate_gs_path("openfast-data", "testing", "turbsim")}
         )
 
         child = Child(
