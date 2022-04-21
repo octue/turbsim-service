@@ -1,5 +1,5 @@
 services:
-  - name: octue/turbsim-service
+  - name: turbsim-service
     project_name: aerosense-twined
     region: europe-west1
     repository_owner: octue
