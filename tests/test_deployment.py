@@ -1,15 +1,18 @@
 import os
 import unittest
 
-from octue.resources import Datafile, Manifest, Dataset, Child
 from octue.cloud import storage
+from octue.log_handlers import apply_log_handler
+from octue.resources import Child, Manifest
+
+
+apply_log_handler()
 
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
 
 
 class TestDeployment(unittest.TestCase):
-
     @unittest.skipUnless(
         condition=os.getenv("RUN_DEPLOYMENT_TESTS", "0").lower() == "1",
         reason="'RUN_DEPLOYMENT_TESTS' environment variable is 0 or not present.",
@@ -35,8 +38,4 @@ class TestDeployment(unittest.TestCase):
 
         self.assertIsNone(answer["output_values"])
         self.assertIsNotNone(answer["output_manifest"])
-
-        output_file = list(answer['output_manifest'].datasets[0].files)[0]
-        self.assertIn("turbsim", output_file.labels)
-
-        storage.client.GoogleCloudStorageClient(project_name).delete(cloud_path=output_file.absolute_path)
+        self.assertTrue(len(answer["output_manifest"].datasets["turbsim"].files), 1)
