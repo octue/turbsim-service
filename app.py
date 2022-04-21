@@ -11,9 +11,6 @@ from octue.utils.processes import run_subprocess_and_log_stdout_and_stderr
 logger = logging.getLogger(__name__)
 
 
-OUTPUT_LOCATION = "gs://openfast-data/output"
-
-
 def run(analysis):
     """Run a turbsim analysis on the input file specified in the input manifest, writing the output file to the cloud.
 
@@ -35,5 +32,5 @@ def run(analysis):
     analysis.output_manifest.datasets["turbsim"] = Dataset(path=os.path.dirname(input_file.local_path))
     analysis.output_manifest.datasets["turbsim"].add(output_file)
 
-    analysis.finalise(upload_output_datasets_to=storage.path.join(OUTPUT_LOCATION, coolname.generate_slug()))
+    analysis.finalise(upload_output_datasets_to=storage.path.join(analysis.output_location, coolname.generate_slug()))
     logger.info("Finished turbsim analysis.")
