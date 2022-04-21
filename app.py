@@ -1,38 +1,39 @@
 import datetime
+import logging
 import os
 
+import coolname
 from octue.cloud import storage
-from octue.resources import Datafile
+from octue.resources import Datafile, Dataset
 from octue.utils.processes import run_subprocess_and_log_stdout_and_stderr
+
+
+logger = logging.getLogger(__name__)
+
+
+OUTPUT_LOCATION = "gs://openfast-data/output"
 
 
 def run(analysis):
     """Run a turbsim analysis on the input file specified in the input manifest, writing the output file to the cloud.
 
-    :param octue.resources.analysis.Analysis analysis:
+    :param octue.resources.Analysis analysis:
     :return None:
     """
     start_datetime = datetime.datetime.now()
-    input_file = list(analysis.input_manifest.get_dataset("turbsim").files)[0]
+    input_file = analysis.input_manifest.datasets["turbsim"].files.one()
 
-    analysis.logger.info("Starting turbulence simulation.")
-    run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.local_path], logger=analysis.logger)
-    analysis.logger.info("Finished turbulence simulation.")
+    logger.info("Starting turbsim analysis.")
+    run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.local_path], logger=logger)
 
-    cloud_path = storage.path.generate_gs_path(
-        os.environ["BUCKET_NAME"], "turbsim", f"TurbSim-{start_datetime.isoformat().replace(':', '-')}.bts"
+    output_file = Datafile(
+        path=os.path.splitext(input_file.local_path)[0] + ".bts",
+        timestamp=start_datetime,
+        labels=["turbsim", "output"],
     )
 
-    # Upload the output file to the cloud.
-    storage.client.GoogleCloudStorageClient(os.environ["PROJECT_NAME"]).upload_file(
-        local_path=input_file.local_path + ".bts",
-        cloud_path=cloud_path,
-    )
-    analysis.logger.info(f"Output saved to {cloud_path}.")
+    analysis.output_manifest.datasets["turbsim"] = Dataset(path=os.path.dirname(input_file.local_path))
+    analysis.output_manifest.datasets["turbsim"].add(output_file)
 
-    # Get the output file and add it to the output dataset.
-    output_file = Datafile(path=cloud_path, project_name=os.environ["PROJECT_NAME"], timestamp=start_datetime, labels=["turbsim", "output"])
-    analysis.output_manifest.get_dataset("turbsim").add(output_file)
-
-    # Validate the output manifest.
-    analysis.finalise()
+    analysis.finalise(upload_output_datasets_to=storage.path.join(OUTPUT_LOCATION, coolname.generate_slug()))
+    logger.info("Finished turbsim analysis.")
