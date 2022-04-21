@@ -6,10 +6,10 @@ ENV PYTHONUNBUFFERED True
 ENV PROJECT_ROOT=/app
 WORKDIR $PROJECT_ROOT
 
-COPY requirements-dev.txt .
+COPY setup.py setup.py
 COPY . .
 
-RUN pip3 install -r requirements-dev.txt
+RUN pip3 install -e .
 
 EXPOSE $PORT
 
