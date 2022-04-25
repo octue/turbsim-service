@@ -3,7 +3,7 @@ services:
     app_configuration_path: app_configuration.json
     project_name: aerosense-twined
     region: europe-west1
-    repository_owner: octue
+    repository_owner: aerosense-ai
     repository_name: turbsim-service
     branch_pattern: ^main$
     dockerfile_path: Dockerfile
