@@ -18,11 +18,15 @@ def run(analysis):
     :return None:
     """
     start_datetime = datetime.datetime.now()
-    input_file = analysis.input_manifest.datasets["turbsim"].files.one()
+
+    input_dataset = analysis.input_manifest.datasets["turbsim"]
+    input_dataset.download_all_files()
+    input_file = input_dataset.files.one()
 
     logger.info("Starting turbsim analysis.")
     run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.local_path], logger=logger)
 
+    # Instantiate a datafile for the output file (it has the same name as the input file but with a ".bts" extension).
     output_file = Datafile(
         path=os.path.splitext(input_file.local_path)[0] + ".bts",
         timestamp=start_datetime,
