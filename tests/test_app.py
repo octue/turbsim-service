@@ -22,7 +22,7 @@ with open(os.path.join(REPOSITORY_ROOT, "app_configuration.json")) as f:
 class TestApp(unittest.TestCase):
     def test_app(self):
         """Test that the app takes input and produces an output manifest with a dataset containing a single `.bts` file."""
-        runner = Runner(app_src=REPOSITORY_ROOT, twine=TWINE_PATH)
+        runner = Runner(app_src=REPOSITORY_ROOT, twine=TWINE_PATH, output_location=OUTPUT_LOCATION)
 
         input_manifest = Manifest(
             datasets={"turbsim": storage.path.generate_gs_path("openfast-data", "testing", "turbsim")}
@@ -30,7 +30,7 @@ class TestApp(unittest.TestCase):
 
         # Mock running an OpenFAST analysis by creating an empty output file.
         with patch("app.run_subprocess_and_log_stdout_and_stderr", self._create_mock_output_file):
-            analysis = runner.run(input_manifest=input_manifest.serialise(), output_location=OUTPUT_LOCATION)
+            analysis = runner.run(input_manifest=input_manifest.serialise())
 
         self.assertIsNone(analysis.output_values)
         self.assertIsNotNone(analysis.output_manifest)
