@@ -16,7 +16,7 @@ REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
 TWINE_PATH = os.path.join(REPOSITORY_ROOT, "twine.json")
 
 with open(os.path.join(REPOSITORY_ROOT, "app_configuration.json")) as f:
-    OUTPUT_LOCATION = json.load(f)["output_location"]
+    OUTPUT_LOCATION = storage.path.join(json.load(f)["output_location"], "testing", "turbsim")
 
 
 class TestApp(unittest.TestCase):
