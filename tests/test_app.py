@@ -36,7 +36,7 @@ class TestApp(unittest.TestCase):
         self.assertIsNotNone(analysis.output_manifest)
         self.assertTrue(len(analysis.output_manifest.datasets["turbsim"].files), 1)
 
-        output_dataset = Dataset.from_cloud(analysis.output_manifest.datasets["turbsim"].path)
+        output_dataset = Dataset(path=analysis.output_manifest.datasets["turbsim"].path)
 
         with output_dataset.files.one() as (datafile, f):
             self.assertEqual(f.read(), "This is a mock TurbSim output file.")

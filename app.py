@@ -33,21 +33,20 @@ def run(analysis):
         run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.local_path], logger=logger)
 
         old_output_filename = os.path.splitext(input_file.local_path)[0] + OUTPUT_EXTENSION
-        new_output_filename = os.path.join(temporary_directory, OUTPUT_FILENAME)
-        os.rename(old_output_filename, new_output_filename)
 
-        # Instantiate a datafile for the output file.
-        output_file = Datafile(
-            path=new_output_filename,
-            timestamp=start_datetime,
-            labels=["turbsim", "output"],
-        )
+        with tempfile.TemporaryDirectory() as new_temporary_directory:
+            new_output_filename = os.path.join(new_temporary_directory, OUTPUT_FILENAME)
+            os.rename(old_output_filename, new_output_filename)
 
-        analysis.output_manifest.datasets["turbsim"] = Dataset(name="turbsim", path=temporary_directory)
-        analysis.output_manifest.datasets["turbsim"].add(output_file)
+            # Instantiate a datafile for the output file.
+            with Datafile(path=new_output_filename, mode="a") as (datafile, f):
+                datafile.timestamp = start_datetime
+                datafile.labels = ["turbsim", "output"]
 
-        analysis.finalise(
-            upload_output_datasets_to=storage.path.join(analysis.output_location, coolname.generate_slug())
-        )
+            analysis.output_manifest.datasets["turbsim"] = Dataset(name="turbsim", path=new_temporary_directory)
+
+            analysis.finalise(
+                upload_output_datasets_to=storage.path.join(analysis.output_location, coolname.generate_slug())
+            )
 
     logger.info("Finished turbsim analysis.")
