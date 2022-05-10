@@ -8,6 +8,6 @@ setup(
     py_modules=["app"],
     install_requires=[
         "coolname>=1.1,<2",
-        "octue @ https://github.com/octue/octue-sdk-python/archive/fix/keep-record-of-delivered-question-uuids.zip",
+        "octue==0.23.5",
     ],
 )
