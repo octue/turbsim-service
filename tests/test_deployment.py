@@ -16,7 +16,7 @@ class TestDeployment(unittest.TestCase):
         condition=os.getenv("RUN_DEPLOYMENT_TESTS", "0").lower() == "1",
         reason="'RUN_DEPLOYMENT_TESTS' environment variable is 0 or not present.",
     )
-    def test_cloud_run_integration(self):
+    def test_cloud_run_deployment(self):
         """Test that the Google Cloud Run integration works, providing a service that can be asked questions and send
         responses. An input dataset from Google Cloud Storage is used for this test.
         """

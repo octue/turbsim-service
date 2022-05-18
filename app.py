@@ -26,7 +26,7 @@ def run(analysis):
 
     with tempfile.TemporaryDirectory() as temporary_directory:
         input_dataset = analysis.input_manifest.datasets["turbsim"]
-        input_dataset.download_all_files(temporary_directory)
+        input_dataset.download(temporary_directory)
         input_file = input_dataset.files.one()
 
         logger.info("Starting turbsim analysis.")
