@@ -1,7 +1,6 @@
 import os
 import unittest
 
-from octue.cloud import storage
 from octue.log_handlers import apply_log_handler
 from octue.resources import Child, Manifest
 
@@ -22,11 +21,9 @@ class TestDeployment(unittest.TestCase):
         responses. An input dataset from Google Cloud Storage is used for this test.
         """
         project_name = os.environ["TEST_PROJECT_NAME"]
-        service_id = "octue.services.c3b47b47-cdfa-433d-b5a8-47a58f3bf7cb"
+        service_id = "aerosense/turbsim-service"
 
-        input_manifest = Manifest(
-            datasets={"turbsim": storage.path.generate_gs_path("openfast-data", "testing", "turbsim")}
-        )
+        input_manifest = Manifest(datasets={"turbsim": "gs://openfast-data/testing/turbsim"})
 
         child = Child(
             name="turbsim-service",

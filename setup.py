@@ -8,6 +8,6 @@ setup(
     py_modules=["app"],
     install_requires=[
         "coolname>=1.1,<2",
-        "octue==0.23.5",
+        "octue==0.26.0",
     ],
 )

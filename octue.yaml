@@ -1,5 +1,6 @@
 services:
   - name: turbsim-service
+    organisation: aerosense
     app_configuration_path: app_configuration.json
     project_name: aerosense-twined
     region: europe-west1
