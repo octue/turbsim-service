@@ -20,15 +20,12 @@ class TestDeployment(unittest.TestCase):
         """Test that the Google Cloud Run integration works, providing a service that can be asked questions and send
         responses. An input dataset from Google Cloud Storage is used for this test.
         """
-        project_name = os.environ["TEST_PROJECT_NAME"]
-        service_id = "aerosense/turbsim-service"
-
         input_manifest = Manifest(datasets={"turbsim": "gs://openfast-data/testing/turbsim"})
 
         child = Child(
             name="turbsim-service",
-            id=service_id,
-            backend={"name": "GCPPubSubBackend", "project_name": project_name},
+            id="aerosense/turbsim-service",
+            backend={"name": "GCPPubSubBackend", "project_name": os.environ["TEST_PROJECT_NAME"]},
         )
 
         answer = child.ask(input_manifest=input_manifest, timeout=360)
