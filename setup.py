@@ -8,6 +8,6 @@ setup(
     py_modules=["app"],
     install_requires=[
         "coolname>=1.1,<2",
-        "octue @ https://github.com/octue/octue-sdk-python/archive/enhancement/automatically-upload-output-datasets-to-output-location.zip",
+        "octue==0.35.1",
     ],
 )
