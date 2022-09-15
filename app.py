@@ -44,7 +44,7 @@ def run(analysis):
             analysis.output_manifest.datasets["turbsim"] = Dataset(name="turbsim", path=new_temporary_directory)
 
             # Explicitly call `finalise` here instead of relying on implicit finalisation so the temporary directory
-            # still when it's called.
+            # still exists when it's called.
             analysis.finalise()
 
     logger.info("Finished turbsim analysis.")
