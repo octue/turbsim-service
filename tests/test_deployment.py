@@ -23,7 +23,6 @@ class TestDeployment(unittest.TestCase):
         input_manifest = Manifest(datasets={"turbsim": "gs://openfast-data/testing/turbsim"})
 
         child = Child(
-            name="turbsim-service",
             id="aerosense/turbsim-service",
             backend={"name": "GCPPubSubBackend", "project_name": os.environ["TEST_PROJECT_NAME"]},
         )

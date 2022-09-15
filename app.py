@@ -3,10 +3,8 @@ import logging
 import os
 import tempfile
 
-import coolname
-from octue.cloud import storage
 from octue.resources import Datafile, Dataset
-from octue.utils.processes import run_subprocess_and_log_stdout_and_stderr
+from octue.utils.threads import run_logged_subprocess
 
 
 logger = logging.getLogger(__name__)
@@ -30,7 +28,7 @@ def run(analysis):
         input_file = input_dataset.files.one()
 
         logger.info("Starting turbsim analysis.")
-        run_subprocess_and_log_stdout_and_stderr(command=["turbsim", input_file.local_path], logger=logger)
+        run_logged_subprocess(command=["turbsim", input_file.local_path], logger=logger)
 
         old_output_filename = os.path.splitext(input_file.local_path)[0] + OUTPUT_EXTENSION
 
@@ -45,8 +43,8 @@ def run(analysis):
 
             analysis.output_manifest.datasets["turbsim"] = Dataset(name="turbsim", path=new_temporary_directory)
 
-            analysis.finalise(
-                upload_output_datasets_to=storage.path.join(analysis.output_location, coolname.generate_slug())
-            )
+            # Explicitly call `finalise` here instead of relying on implicit finalisation so the temporary directory
+            # still exists when it's called.
+            analysis.finalise()
 
     logger.info("Finished turbsim analysis.")

@@ -1,0 +1,30 @@
+# This workflow releases a new version of the package.
+
+name: Release
+
+# Only trigger when a pull request into main branch is merged.
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Get package version
+      run: echo "PACKAGE_VERSION=$(python setup.py --version)" >> $GITHUB_ENV
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, no need to create your own.
+      with:
+        tag_name: ${{ env.PACKAGE_VERSION }}
+        release_name: ${{ github.event.pull_request.title }}
+        body: ${{ github.event.pull_request.body }}
+        draft: false
+        prerelease: false

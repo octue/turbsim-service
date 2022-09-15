@@ -27,7 +27,7 @@ class TestApp(unittest.TestCase):
         input_manifest = Manifest(datasets={"turbsim": "gs://openfast-data/testing/turbsim"})
 
         # Mock running an OpenFAST analysis by creating an empty output file.
-        with patch("app.run_subprocess_and_log_stdout_and_stderr", self._create_mock_output_file):
+        with patch("app.run_logged_subprocess", self._create_mock_output_file):
             analysis = runner.run(input_manifest=input_manifest.serialise())
 
         self.assertIsNone(analysis.output_values)
