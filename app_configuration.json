@@ -1,3 +1,3 @@
 {
-    "output_location": "gs://octue-openfast-data/output"
+    "output_location": "gs://octue-openfast-data/turbsim/output"
 }
