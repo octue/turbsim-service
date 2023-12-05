@@ -8,6 +8,6 @@ setup(
     py_modules=["app"],
     install_requires=[
         "coolname>=1.1,<2",
-        "octue==0.50.0",
+        "octue @ git+https://github.com/octue/octue-sdk-python.git@fix-manifest-bugs",
     ],
 )
