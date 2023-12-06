@@ -1,12 +1,5 @@
 services:
-  - name: turbsim-service
-    organisation: aerosense
+  - namespace: octue
+    name: turbsim-service
     app_configuration_path: app_configuration.json
-    project_name: aerosense-twined
-    region: europe-west1
-    repository_owner: aerosense-ai
-    repository_name: turbsim-service
-    branch_pattern: ^main$
-    dockerfile_path: Dockerfile
-    maximum_instances: 10
-    memory: 1024Mi
+    crash_diagnostics_cloud_path: gs://octue-turbsim-service/diagnostics

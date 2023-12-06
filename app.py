@@ -4,7 +4,7 @@ import os
 import tempfile
 
 from octue.resources import Datafile, Dataset
-from octue.utils.threads import run_logged_subprocess
+from octue.utils.processes import run_logged_subprocess
 
 
 logger = logging.getLogger(__name__)

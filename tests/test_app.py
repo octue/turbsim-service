@@ -24,7 +24,7 @@ class TestApp(unittest.TestCase):
         """Test that the app takes input and produces an output manifest with a dataset containing a single `.bts` file."""
         runner = Runner(app_src=REPOSITORY_ROOT, twine=TWINE_PATH, output_location=OUTPUT_LOCATION)
 
-        input_manifest = Manifest(datasets={"turbsim": "gs://openfast-data/testing/turbsim"})
+        input_manifest = Manifest(datasets={"turbsim": f"gs://{os.environ['TEST_BUCKET_NAME']}/turbsim"})
 
         # Mock running an OpenFAST analysis by creating an empty output file.
         with patch("app.run_logged_subprocess", self._create_mock_output_file):
