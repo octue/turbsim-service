@@ -1,15 +1,29 @@
 FROM octue/openfast:3.1.0
 
 # Allow statements and log messages to immediately appear in the Knative logs on Google Cloud.
-ENV PYTHONUNBUFFERED True
+RUN apt-get update -y && apt-get install -y --fix-missing build-essential curl && rm -rf /var/lib/apt/lists/*
 
-ENV PROJECT_ROOT=/app
-WORKDIR $PROJECT_ROOT
+# Install poetry.
+ENV POETRY_HOME=/root/.poetry
+ENV PATH "$POETRY_HOME/bin:$PATH"
+RUN curl -sSL https://install.python-poetry.org | python3 - && poetry config virtualenvs.create false;
 
-COPY setup.py setup.py
+# Copy in the dependencies files for caching.
+COPY pyproject.toml poetry.lock ./
+
+# Install the dependencies only to utilise layer caching for quick rebuilds.
+RUN poetry install
+#    --no-ansi  \
+#    --no-interaction  \
+#    --no-cache  \
+#    --no-root  \
+#    --only main;
+
+# Copy local code to the application root directory.
 COPY . .
 
-RUN pip3 install -e .
+# Install local packages.
+RUN poetry install --only main
 
 EXPOSE $PORT
 

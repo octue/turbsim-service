@@ -1,8 +1,0 @@
-# Quality control
-pre-commit<=3
-
-# Testing
-coverage
-
-# Install the current app (as editable, so you can develop on it)
---editable .
