@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="turbsim-service",
-    version="0.2.0",
+    version="0.2.1",
     author="Marcus Lugg <marcus@octue.com>",
     py_modules=["app"],
     install_requires=[
