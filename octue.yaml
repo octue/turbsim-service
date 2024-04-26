@@ -1,5 +1,5 @@
 services:
-  - namespace: aerosense
+  - namespace: octue
     name: turbsim-service
     app_configuration_path: app_configuration.json
     crash_diagnostics_cloud_path: gs://octue-turbsim-service/diagnostics

@@ -5,10 +5,14 @@ on:
     branches:
       - main
 
+  push:
+    branches:
+      - main
+
 jobs:
   deploy:
     if: "!contains(github.event.head_commit.message, 'skipci')"
-    uses: octue/.github/.github/workflows/reusable-deploy-cloud-run-service.yml@main
+    uses: octue/workflows/.github/workflows/deploy-cloud-run-service.yml@main
     permissions:
       id-token: write
       contents: read
