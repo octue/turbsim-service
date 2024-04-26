@@ -9,6 +9,7 @@ apply_log_handler()
 
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
+SRUID = "octue/turbsim-service:refs-pull-2-merg"
 
 
 class TestDeployment(unittest.TestCase):
@@ -22,11 +23,7 @@ class TestDeployment(unittest.TestCase):
         """
         input_manifest = Manifest(datasets={"turbsim": f"gs://{os.environ['TEST_BUCKET_NAME']}/turbsim"})
 
-        child = Child(
-            id="octue/turbsim-service:0.2.0",
-            backend={"name": "GCPPubSubBackend", "project_name": os.environ["TEST_PROJECT_NAME"]},
-        )
-
+        child = Child(id=SRUID, backend={"name": "GCPPubSubBackend", "project_name": os.environ["TEST_PROJECT_NAME"]})
         answer = child.ask(input_manifest=input_manifest, timeout=360)
 
         self.assertIsNone(answer["output_values"])
