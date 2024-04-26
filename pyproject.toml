@@ -7,8 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-coolname = "^1"
-octue = "0.50.1"
+octue = { git = "https://github.com/octue/octue-sdk-python", branch = "upgrade-twined" }
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "<=3"
