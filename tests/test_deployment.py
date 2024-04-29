@@ -9,6 +9,7 @@ apply_log_handler()
 
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
+SRUID = "octue/turbsim-service:0.3.0"
 
 
 class TestDeployment(unittest.TestCase):
@@ -20,14 +21,10 @@ class TestDeployment(unittest.TestCase):
         """Test that the Google Cloud Run integration works, providing a service that can be asked questions and send
         responses. An input dataset from Google Cloud Storage is used for this test.
         """
+        child = Child(id=SRUID, backend={"name": "GCPPubSubBackend", "project_name": os.environ["TEST_PROJECT_NAME"]})
+
         input_manifest = Manifest(datasets={"turbsim": f"gs://{os.environ['TEST_BUCKET_NAME']}/turbsim"})
-
-        child = Child(
-            id="octue/turbsim-service:0.2.0",
-            backend={"name": "GCPPubSubBackend", "project_name": os.environ["TEST_PROJECT_NAME"]},
-        )
-
-        answer = child.ask(input_manifest=input_manifest, timeout=360)
+        answer, question_uuid = child.ask(input_manifest=input_manifest, timeout=360)
 
         self.assertIsNone(answer["output_values"])
         self.assertIsNotNone(answer["output_manifest"])

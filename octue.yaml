@@ -1,5 +1,6 @@
 services:
   - namespace: octue
     name: turbsim-service
+    app_source_path: turbsim_service
     app_configuration_path: app_configuration.json
-    crash_diagnostics_cloud_path: gs://octue-turbsim-service/diagnostics
+    diagnostics_cloud_path: gs://octue-turbsim-service/diagnostics
