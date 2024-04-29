@@ -9,7 +9,7 @@ apply_log_handler()
 
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
-SRUID = "octue/turbsim-service:refs-pull-2-merg"
+SRUID = "octue/turbsim-service:0.3.0"
 
 
 class TestDeployment(unittest.TestCase):
