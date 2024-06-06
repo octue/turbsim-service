@@ -1,4 +1,4 @@
-FROM ghcr.io/OpenFAST/openfast:3.5.3
+FROM ghcr.io/openfast/openfast:3.5.3
 
 # Allow statements and log messages to immediately appear in the Knative logs on Google Cloud.
 ENV PYTHONUNBUFFERED True
