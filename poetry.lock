@@ -927,7 +927,7 @@ hdf5 = ["h5py (>=3.6,<4.0)"]
 type = "git"
 url = "https://github.com/octue/octue-sdk-python"
 reference = "improve-ask-multiple"
-resolved_reference = "6764312261db3b093e24523ba9fde7609546c5e6"
+resolved_reference = "1f41527160d7b493460ed7156425dbd90eaa248d"
 
 [[package]]
 name = "packaging"
