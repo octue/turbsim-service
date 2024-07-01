@@ -24,3 +24,4 @@ jobs:
       gcp_service_name: turbsim-service
       local_dockerfile: ./Dockerfile
       cloud_run_flags: '--ingress=all --allow-unauthenticated --service-account=turbsim-service@octue-openfast.iam.gserviceaccount.com --max-instances=10 --memory=2048Mi'
+      env_vars: 'OCTUE_SERVICE_CONFIGURATION_PATH=/workspace/octue.yaml'

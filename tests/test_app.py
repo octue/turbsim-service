@@ -1,10 +1,8 @@
-import json
 import os
 import unittest
 from unittest.mock import patch
 
 from octue import Runner
-from octue.cloud import storage
 from octue.configuration import load_service_and_app_configuration
 from octue.log_handlers import apply_log_handler
 from octue.resources import Dataset, Manifest
@@ -14,10 +12,6 @@ apply_log_handler()
 
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
-TWINE_PATH = os.path.join(REPOSITORY_ROOT, "twine.json")
-
-with open(os.path.join(REPOSITORY_ROOT, "app_configuration.json")) as f:
-    OUTPUT_LOCATION = storage.path.join(json.load(f)["output_location"], "testing", "turbsim")
 
 
 class TestApp(unittest.TestCase):
