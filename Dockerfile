@@ -1,7 +1,7 @@
 FROM ghcr.io/openfast/openfast:3.5.3
 
 # Allow statements and log messages to immediately appear in the Knative logs on Google Cloud.
-ENV PYTHONUNBUFFERED True
+ENV PYTHONUNBUFFERED=True
 
 ENV PROJECT_ROOT=/workspace
 WORKDIR $PROJECT_ROOT
@@ -10,7 +10,7 @@ RUN apt-get update -y && apt-get install -y --fix-missing curl python3.11 && rm 
 
 # Install poetry.
 ENV POETRY_HOME=/root/.poetry
-ENV PATH "$POETRY_HOME/bin:$PATH"
+ENV PATH="$POETRY_HOME/bin:$PATH"
 RUN curl -sSL https://install.python-poetry.org | python3.11 - && poetry config virtualenvs.create false;
 
 # Copy in the dependencies files for caching.
