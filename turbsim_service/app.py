@@ -25,8 +25,8 @@ def run(analysis):
     temporary_directory = RegisteredTemporaryDirectory().name
     input_dataset = analysis.input_manifest.datasets["turbsim"]
     input_dataset.download(temporary_directory)
-    input_file = input_dataset.files.one()
 
+    input_file = input_dataset.files.filter(name="TurbSim.inp").one()
     logger.info("Starting turbsim analysis.")
     run_logged_subprocess(command=["turbsim", input_file.local_path], logger=logger)
 
