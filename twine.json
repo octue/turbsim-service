@@ -1,12 +1,14 @@
 {
     "input_manifest": {
         "datasets": {
-            "turbsim": {"purpose": "A dataset containing a single TurbSim.inp file."}
+            "turbsim": {
+                "purpose": "A dataset containing a 'TurbSim.inp' file and, optionally, a profile file or timeseries file."
+            }
         }
     },
     "output_manifest": {
 		"datasets": {
-            "turbsim": {"purpose": "A dataset containing a single TurbSim.bts (binary timeseries) file."}
+            "turbsim": {"purpose": "A dataset containing a single 'TurbSim.bts' (binary timeseries) file."}
         }
 	}
 }

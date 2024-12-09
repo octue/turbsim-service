@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "turbsim-service"
-version = "0.4.2"
+version = "0.5.0"
 description = "Turbsim as a service."
 authors = ["Marcus Lugg <marcus@octue.com>"]
 readme = "README.md"
