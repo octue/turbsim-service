@@ -24,9 +24,18 @@ def run(analysis):
 
     temporary_directory = RegisteredTemporaryDirectory().name
     input_dataset = analysis.input_manifest.datasets["turbsim"]
-    input_dataset.download(temporary_directory)
-    input_file = input_dataset.files.one()
 
+    number_of_files = len(input_dataset.files)
+
+    if number_of_files not in {1, 2}:
+        raise ValueError(
+            "The input dataset should only contain either 1 or 2 input files - a 'TurbSim.inp' file and, optionally, "
+            f"a profile or timeseries file; received {number_of_files} files."
+        )
+
+    input_dataset.download(temporary_directory)
+
+    input_file = input_dataset.files.filter(name="TurbSim.inp").one()
     logger.info("Starting turbsim analysis.")
     run_logged_subprocess(command=["turbsim", input_file.local_path], logger=logger)
 
