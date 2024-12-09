@@ -1,4 +1,5 @@
 import os
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -15,6 +16,48 @@ REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
 
 
 class TestApp(unittest.TestCase):
+    def test_error_raised_if_input_dataset_empty(self):
+        """Test that an error is raised if the input dataset is empty."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            service_configuration, app_configuration = load_service_and_app_configuration(
+                service_configuration_path=os.path.join(REPOSITORY_ROOT, "octue.yaml")
+            )
+
+            runner = Runner.from_configuration(
+                service_configuration=service_configuration,
+                app_configuration=app_configuration,
+                project_name=os.environ["TEST_PROJECT_NAME"],
+                service_id="octue/turbsim-service:test",
+            )
+
+            input_manifest = Manifest(datasets={"turbsim": temporary_directory})
+
+            with self.assertRaises(ValueError):
+                runner.run(input_manifest=input_manifest.serialise())
+
+    def test_error_raised_if_input_dataset_has_more_than_two_files(self):
+        """Test that an error is raised if the input dataset has more than two files."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            for i in range(3):
+                with open(os.path.join(temporary_directory, f"file_{i}"), "w") as f:
+                    f.write("Hello")
+
+            service_configuration, app_configuration = load_service_and_app_configuration(
+                service_configuration_path=os.path.join(REPOSITORY_ROOT, "octue.yaml")
+            )
+
+            runner = Runner.from_configuration(
+                service_configuration=service_configuration,
+                app_configuration=app_configuration,
+                project_name=os.environ["TEST_PROJECT_NAME"],
+                service_id="octue/turbsim-service:test",
+            )
+
+            input_manifest = Manifest(datasets={"turbsim": temporary_directory})
+
+            with self.assertRaises(ValueError):
+                runner.run(input_manifest=input_manifest.serialise())
+
     def test_with_turbsim_input_file_only(self):
         """Test that the app works with a TurbSim input file only and produces an output manifest with a dataset
         containing a single `.bts` file.
