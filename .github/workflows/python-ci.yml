@@ -1,3 +1,5 @@
+# This workflow will install the Python dependencies and run the tests.
+
 name: python-ci
 
 on:
@@ -12,3 +14,30 @@ jobs:
     with:
       path: pyproject.toml
       breaking_change_indicated_by: minor
+
+
+  test:
+    if: "!contains(github.event.head_commit.message, 'skipci')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install package
+        run: poetry install
+
+      - name: Authenticate with Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: "projects/13074362726/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider"
+          service_account: "github-actions@octue-twined-services.iam.gserviceaccount.com"
+
+      - name: Run tests
+        run: poetry run python -m unittest
