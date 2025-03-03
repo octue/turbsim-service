@@ -13,11 +13,11 @@ BUCKET_NAME = "octue-octue-twined-services-octue-twined"
 PROJECT_NAME = "octue-twined-services"
 
 
+@unittest.skipUnless(
+    condition=os.getenv("RUN_DEPLOYMENT_TESTS", "0").lower() == "1",
+    reason="'RUN_DEPLOYMENT_TESTS' environment variable is 0 or not present.",
+)
 class TestDeployment(unittest.TestCase):
-    @unittest.skipUnless(
-        condition=os.getenv("RUN_DEPLOYMENT_TESTS", "0").lower() == "1",
-        reason="'RUN_DEPLOYMENT_TESTS' environment variable is 0 or not present.",
-    )
     def test_with_input_file_only(self):
         """Test that the Google Cloud Run integration works, providing a service that can be asked questions and send
         responses. An input dataset from Google Cloud Storage is used for this test.
