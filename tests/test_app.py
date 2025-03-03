@@ -1,12 +1,12 @@
 import os
 import tempfile
-import unittest
 from unittest.mock import patch
 
 from octue import Runner
 from octue.configuration import load_service_and_app_configuration
 from octue.log_handlers import apply_log_handler
 from octue.resources import Dataset, Manifest
+from tests.base import BaseTestCase
 
 apply_log_handler()
 
@@ -14,9 +14,10 @@ apply_log_handler()
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
 BUCKET_NAME = "octue-octue-twined-services-octue-twined"
 PROJECT_NAME = "octue-twined-services"
+DATA_DIR = os.path.join(REPOSITORY_ROOT, "tests", "data")
 
 
-class TestApp(unittest.TestCase):
+class TestApp(BaseTestCase):
     def test_error_raised_if_input_dataset_empty(self):
         """Test that an error is raised if the input dataset is empty."""
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -74,7 +75,7 @@ class TestApp(unittest.TestCase):
             service_id="octue/turbsim-service:test",
         )
 
-        input_manifest = Manifest(datasets={"turbsim": f"gs://{BUCKET_NAME}/turbsim-service/testing/turbsim"})
+        input_manifest = Manifest(datasets={"turbsim": os.path.join(DATA_DIR, "turbsim")})
 
         # Mock running an OpenFAST analysis by creating an empty output file.
         with patch("octue.utils.processes.run_logged_subprocess", self._create_mock_output_file):
@@ -102,9 +103,7 @@ class TestApp(unittest.TestCase):
             service_id="octue/turbsim-service:test",
         )
 
-        input_manifest = Manifest(
-            datasets={"turbsim": f"gs://{BUCKET_NAME}/turbsim-service/testing/turbsim_with_profile"}
-        )
+        input_manifest = Manifest(datasets={"turbsim": os.path.join(DATA_DIR, "turbsim_with_profile")})
 
         self.assertEqual(len(input_manifest.datasets["turbsim"].files), 2)
 
