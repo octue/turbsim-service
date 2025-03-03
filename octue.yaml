@@ -3,4 +3,8 @@ services:
     name: turbsim-service
     app_source_path: turbsim_service
     app_configuration_path: app_configuration.json
-    diagnostics_cloud_path: gs://octue-turbsim-service/diagnostics
+    diagnostics_cloud_path: gs://octue-octue-twined-services-octue-twined/turbsim-service/diagnostics
+    event_store_table_id: octue_twined.service-events
+    service_registries:
+      - name: Octue service registry
+        endpoint: https://europe-west9-octue-twined-services.cloudfunctions.net/main-octue-twined-service-registry

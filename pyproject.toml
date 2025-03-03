@@ -1,18 +1,31 @@
 [tool.poetry]
 name = "turbsim-service"
-version = "0.5.0"
+version = "0.5.1"
 description = "Turbsim as a service."
 authors = ["Marcus Lugg <marcus@octue.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.12"
-octue = "0.59.1"
+python = "^3.11"
+octue = { git = "https://github.com/octue/octue-sdk-python", branch = "rc-kueue" }
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "<=3"
 coverage = "^7.3.2"
+gcp-storage-emulator = "^2024.8.3"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes.
+lint.select = ["E", "F"]
+# Ignore E501 line-too-long - see https://docs.astral.sh/ruff/faq/#is-the-ruff-linter-compatible-with-black for why
+lint.ignore = ["F405", "E501", "E203", "E731", "N818"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["octue", "app", "fractal", "test", "tests", "twined"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+force-sort-within-sections = true

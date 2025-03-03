@@ -6,7 +6,6 @@ from octue.resources import Datafile, Dataset
 from octue.utils.files import RegisteredTemporaryDirectory
 from octue.utils.processes import run_logged_subprocess
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -33,7 +32,8 @@ def run(analysis):
             f"a profile or timeseries file; received {number_of_files} files."
         )
 
-    input_dataset.download(temporary_directory)
+    if input_dataset.exists_in_cloud:
+        input_dataset.download(temporary_directory)
 
     input_file = input_dataset.files.filter(name="TurbSim.inp").one()
     logger.info("Starting turbsim analysis.")

@@ -1,5 +1,3 @@
-# This workflow releases a new version of the package.
-
 name: Release
 
 # Only trigger when a pull request into main branch is merged.
@@ -9,15 +7,43 @@ on:
     branches:
       - main
 
+
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install package
+        run: poetry install
+
+      - name: Authenticate with Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: "projects/13074362726/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider"
+          service_account: "github-actions@octue-twined-services.iam.gserviceaccount.com"
+
+      - name: Run tests
+        run: poetry run python -m unittest
+
+
   release:
     if: "github.event.pull_request.merged == true"
+    needs: test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install Poetry
-      uses: snok/install-poetry@v1.3.2
+      uses: snok/install-poetry@v1
 
     - name: Check pyproject.toml file
       run: poetry check
@@ -35,3 +61,18 @@ jobs:
         body: ${{ github.event.pull_request.body }}
         draft: false
         prerelease: false
+
+
+  deploy:
+    uses: octue/workflows/.github/workflows/build-twined-service.yml@0.4.2
+    needs: release
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      gcp_project_name: octue-twined-services
+      gcp_project_number: 13074362726
+      gcp_region: europe-west9
+      gcp_resource_affix: octue
+      gcp_service_name: turbsim-service
+      local_dockerfile: Dockerfile

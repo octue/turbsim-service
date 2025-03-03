@@ -1,27 +1,21 @@
 name: cd
 
 on:
-  pull_request:
-    branches:
-      - main
-
   push:
-    branches:
+    branches-ignore:
       - main
 
 jobs:
   deploy:
     if: "!contains(github.event.head_commit.message, 'skipci')"
-    uses: octue/workflows/.github/workflows/deploy-cloud-run-service.yml@main
+    uses: octue/workflows/.github/workflows/build-twined-service.yml@0.4.2
     permissions:
       id-token: write
       contents: read
     with:
-      gcp_project_name: octue-openfast
-      gcp_project_number: 86611255144
-      gcp_region: europe-west3
+      gcp_project_name: octue-twined-services
+      gcp_project_number: 13074362726
+      gcp_region: europe-west9
       gcp_resource_affix: octue
       gcp_service_name: turbsim-service
-      local_dockerfile: ./Dockerfile
-      cloud_run_flags: '--ingress=all --allow-unauthenticated --service-account=turbsim-service@octue-openfast.iam.gserviceaccount.com --max-instances=10 --memory=2048Mi'
-      env_vars: 'OCTUE_SERVICE_CONFIGURATION_PATH=/workspace/octue.yaml'
+      local_dockerfile: Dockerfile
