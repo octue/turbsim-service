@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     if: "!contains(github.event.head_commit.message, 'skipci')"
-    uses: octue/workflows/.github/workflows/deploy-cloud-run-service.yml@main
+    uses: octue/workflows/.github/workflows/build-twined-service.yml@0.4.2
     permissions:
       id-token: write
       contents: read
