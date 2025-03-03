@@ -8,11 +8,12 @@ from octue.configuration import load_service_and_app_configuration
 from octue.log_handlers import apply_log_handler
 from octue.resources import Dataset, Manifest
 
-
 apply_log_handler()
 
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
+BUCKET_NAME = "octue-octue-twined-services-octue-twined"
+PROJECT_NAME = "octue-twined-services"
 
 
 class TestApp(unittest.TestCase):
@@ -26,7 +27,7 @@ class TestApp(unittest.TestCase):
             runner = Runner.from_configuration(
                 service_configuration=service_configuration,
                 app_configuration=app_configuration,
-                project_name=os.environ["TEST_PROJECT_NAME"],
+                project_name=PROJECT_NAME,
                 service_id="octue/turbsim-service:test",
             )
 
@@ -49,7 +50,7 @@ class TestApp(unittest.TestCase):
             runner = Runner.from_configuration(
                 service_configuration=service_configuration,
                 app_configuration=app_configuration,
-                project_name=os.environ["TEST_PROJECT_NAME"],
+                project_name=PROJECT_NAME,
                 service_id="octue/turbsim-service:test",
             )
 
@@ -69,11 +70,11 @@ class TestApp(unittest.TestCase):
         runner = Runner.from_configuration(
             service_configuration=service_configuration,
             app_configuration=app_configuration,
-            project_name=os.environ["TEST_PROJECT_NAME"],
+            project_name=PROJECT_NAME,
             service_id="octue/turbsim-service:test",
         )
 
-        input_manifest = Manifest(datasets={"turbsim": f"gs://{os.environ['TEST_BUCKET_NAME']}/turbsim"})
+        input_manifest = Manifest(datasets={"turbsim": f"gs://{BUCKET_NAME}/turbsim-service/testing/turbsim"})
 
         # Mock running an OpenFAST analysis by creating an empty output file.
         with patch("octue.utils.processes.run_logged_subprocess", self._create_mock_output_file):
@@ -97,14 +98,12 @@ class TestApp(unittest.TestCase):
         runner = Runner.from_configuration(
             service_configuration=service_configuration,
             app_configuration=app_configuration,
-            project_name=os.environ["TEST_PROJECT_NAME"],
+            project_name=PROJECT_NAME,
             service_id="octue/turbsim-service:test",
         )
 
         input_manifest = Manifest(
-            datasets={
-                "turbsim": f"gs://{os.environ['TEST_BUCKET_NAME']}/turbsim_with_profile"
-            }
+            datasets={"turbsim": f"gs://{BUCKET_NAME}/turbsim-service/testing/turbsim_with_profile"}
         )
 
         self.assertEqual(len(input_manifest.datasets["turbsim"].files), 2)
