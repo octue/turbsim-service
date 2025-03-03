@@ -18,4 +18,4 @@ jobs:
       gcp_region: europe-west9
       gcp_resource_affix: octue
       gcp_service_name: turbsim-service
-      local_dockerfile: ./Dockerfile
+      local_dockerfile: Dockerfile
