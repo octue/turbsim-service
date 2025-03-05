@@ -12,7 +12,7 @@ apply_log_handler()
 
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
-BUCKET_NAME = "octue-octue-twined-services-octue-twined"
+BUCKET_NAME = "octue-twined-services-octue-twined"
 PROJECT_NAME = "octue-twined-services"
 DATA_DIR = os.path.join(REPOSITORY_ROOT, "tests", "data")
 
