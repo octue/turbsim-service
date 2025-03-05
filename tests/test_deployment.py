@@ -9,7 +9,7 @@ apply_log_handler()
 
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(__file__))
 SRUID = "octue/turbsim-service:0.5.1"
-BUCKET_NAME = "octue-octue-twined-services-octue-twined"
+BUCKET_NAME = "octue-twined-services-octue-twined"
 PROJECT_NAME = "octue-twined-services"
 
 
